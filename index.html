@@ -1,0 +1,876 @@
+<<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECOTEXTIL - Inicio</title>
+    <link rel="stylesheet" href="styleslavanda.css">
+
+    <style>
+/* ======================================= */
+/* ESTILOS ADICIONALES PARA EL ACORDEÓN DEL CHATBOT */
+/* ======================================= */
+#chat-messages .product-accordion-item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+#chat-messages .accordion-button {
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: background-color 0.2s;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chat-messages .accordion-button:hover {
+    background-color: #ddd;
+}
+
+#chat-messages .accordion-content {
+    padding: 0 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+}
+
+#chat-messages .accordion-content.active {
+    max-height: 600px; /* Ajuste para contenido visible */
+    padding: 10px;
+}
+
+/* Estilos para el acordeón anidado (productos) */
+#chat-messages .product-accordion-item-nested {
+    border-top: 1px solid #eee;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+#chat-messages .product-accordion-item-nested .accordion-button {
+    background-color: #fff;
+    font-weight: normal;
+    padding: 8px 0;
+    font-size: 0.9em;
+}
+
+#chat-messages .product-accordion-item-nested .accordion-content.active {
+    padding: 10px 0 10px 10px; /* Ajuste para contenido anidado */
+}
+
+#chat-messages .buy-button {
+    background-color: #9c88ff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+/* ======================================= */
+/* ESTILOS ADICIONALES PARA EL MODAL (Encuesta) */
+/* ======================================= */
+#miModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none; /* Oculto por defecto */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#miModal.visible {
+    display: flex;
+}
+
+#miModal .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#miModal .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+
+#miModal iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+
+/* ======================================= */
+/* REGLAS PARA DISPOSITIVOS MÓVILES (Max 768px) - DISEÑO RESPONSIVO AGRESIVO */
+/* ======================================= */
+@media (max-width: 768px) {
+    /* ------------------------------------- */
+    /* 1. NAVEGACIÓN Y ESTRUCTURA (Header)  */
+    /* ------------------------------------- */
+    
+    header {
+        /* Vital: asegura que no se superponga */
+        position: static; 
+        width: 100%;
+        padding: 0;
+        background-color: #f3e9ff; /* Fondo limpio para móvil */
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .nav-centro {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1rem 0.5rem; 
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .menu {
+        flex-direction: column; 
+        width: 100%;
+        margin: 10px 0 0 0;
+        padding: 0;
+    }
+
+    .menu li {
+        width: 100%;
+        margin: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
+    }
+    
+    .menu li:last-child {
+        border-bottom: none;
+    }
+
+    .menu a {
+        padding: 0.75rem 0;
+        display: block; 
+        color: #333; 
+    }
+
+    .submenu {
+        position: static;
+        width: 100%;
+        padding-left: 15px; 
+        background-color: #f0f0f0; 
+        display: none; 
+    }
+    
+    .carrito-icono {
+        padding: 0.75rem 0 !important; 
+        text-align: center;
+        display: block;
+    }
+
+    /* ------------------------------------- */
+    /* 2. SLIDER DE PRODUCTOS (CARRUSEL)    */
+    /* ------------------------------------- */
+    
+    .slider-box {
+        overflow-x: scroll; /* Habilitar el deslizamiento horizontal */
+        width: 100%;
+        padding: 0 1rem;
+        margin-top: 1rem; 
+    }
+
+    .slider-box ul {
+        display: flex; /* Mostrar ítems en línea */
+        width: auto; 
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .slider-box ul li {
+        flex-shrink: 0; 
+        width: 150px; 
+        margin-right: 15px; 
+        text-align: center; 
+        min-height: 280px; /* Asegura la uniformidad de las tarjetas */
+    }
+
+    .slide-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centrado horizontal */
+        justify-content: flex-start; /* Apilado desde arriba */
+        height: 100%;
+    }
+
+    .slide-item img {
+        height: 150px; 
+        width: 150px; 
+        object-fit: cover; 
+        border-radius: 8px; 
+        margin-bottom: 5px; 
+    }
+    
+    /* ------------------------------------- */
+    /* 3. SECCIÓN DE CATEGORÍAS Y HERO      */
+    /* ------------------------------------- */
+
+    .hero {
+        padding: 3rem 1rem; 
+        text-align: center;
+    }
+    
+    h2 {
+        text-align: center;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .banner-categorias {
+        flex-direction: column; 
+        padding: 1rem;
+        gap: 15px; 
+    }
+
+    .categoria-banner {
+        min-width: 100%; 
+        height: 200px;
+    }
+    
+    /* ------------------------------------- */
+    /* 4. FOOTER Y CHATBOT                  */
+    /* ------------------------------------- */
+    
+    footer .container {
+        flex-direction: column; 
+        gap: 2rem;
+        padding: 1rem;
+    }
+    
+    #chatbot-window {
+        width: 90%; 
+        max-width: 350px;
+        right: 10px; 
+        bottom: 80px; 
+    }
+}
+</style>
+</head>
+<body>
+    <header>
+        <nav class="nav-centro">
+            <h1>Ecotextil</h1>
+            <ul class="menu">
+                <li><a href="index.html">inicio</a></li>
+                <li class="dropdown">
+                    <a href="nosotros.html">Nosotros</a>
+                    <ul class="submenu">
+                        <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                        <li><a href="#nuestra-mision">Nuestra Misión</a></li>
+                        <li><a href="#nuestra-vision">Nuestra Visión</a></li>
+                        <li><a href="#resultados">Resultados de la Encuesta</a></li>
+                    </ul>
+                </li>
+                <li><a href="productos2.html">Productos</a></li>
+                <li><a href="Contactanos.html">Contáctanos</a></li>
+                <li>
+                    <a href="Carrito.html" class="carrito-icono" style="position: relative;">
+                       <img src="img/464-4646442_carrito-de-compras-carro-de-compras-blanco-clipart.png" alt="Carrito de compras" style="width: 24px; height: 24px;">
+                       <span id="contador-carrito" style="position: absolute; top: -8px; right: -8px; background-color: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px;">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero">
+            <div class="container hero-content">
+                <h2>Moda con Impacto</h2>
+                <p>productos sostenibles que marcan la diferencia.</p>
+                <a href="productos2.html" class="btn">Descubre Nuestros Productos</a>
+                <div id="theCarousel" class="carousel slide" data-ride="carousel"></div>
+            </div>
+        </section>
+
+        <div class="slider-box">
+            <ul>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/pañoleta.jpg" alt="Producto 1">
+                        <p class="description">Pañoleta</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/bolsojean.jpg" alt="Producto 2">
+                        <p class="description">Bolso de Jean</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-06-05 at 11.37.26 PM.jpeg" alt="Producto 3">
+                        <p class="description">Cama para Perro</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-09-11 at 1.32.17 PM.jpeg" alt="Producto 4">
+                        <p class="description">Maleta de Jean</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-06-06 at 1.17.37 PM.jpeg" alt="Producto 5">
+                        <p class="description">Trapo para Limpiar</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-08-29 at 1.40.49 PM.jpeg" alt="Producto 6">
+                        <p class="description">Funda para Almohada</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/pañoleta.jpg" alt="Producto 1">
+                        <p class="description">Pañoleta</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/bolsojean.jpg" alt="Producto 2">
+                        <p class="description">Bolso de Jean</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-06-05 at 11.37.26 PM.jpeg" alt="Producto 3">
+                        <p class="description">Cama para Perro</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-09-11 at 1.32.17 PM.jpeg" alt="Producto 4">
+                        <p class="description">Maleta de Jean</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-06-06 at 1.17.37 PM.jpeg" alt="Producto 5">
+                        <p class="description">Trapo para Limpiar</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-item">
+                        <img src="img/WhatsApp Image 2025-08-29 at 1.40.49 PM.jpeg" alt="Producto 6">
+                        <p class="description">Funda para Almohada</p>
+                        <a href="productos2.html" class="btn-ver-mas">Ver más</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+            <center><h2>Descubre nuestros productos segun tu necesidad</h2></center>
+
+        <section class="banner-categorias">
+          <div class="categoria-banner pastel-card" style="background-image: url('img/illustration-silhouettes-of-dogs-and-cats-vector.jpg');">
+            <div class="contenido">
+              <h3 class="titulo-categoria">MASCOTAS</h3>
+              <p class="descripcion-categoria"></p>
+              <button class="boton-plus" onclick="window.location.href='productos2.html'">+</button>
+
+            </div>
+          </div>
+          <div class="categoria-banner pastel-card" style="background-image: url('img/Basic_Elements__28161_29.jpg')">
+            <div class="contenido">
+              <h3 class="titulo-categoria">HOGAR</h3>
+              <p class="descripcion-categoria"></p>
+              <button class="boton-plus" onclick="window.location.href='productos2.html'">+</button>
+
+            </div>
+          </div>
+          <div class="categoria-banner pastel-card" style="background-image: url('img/depositphotos_380531026-stock-illustration-shopping-bag-icon-bag-vector.jpg');">
+            <div class="contenido">
+              <h3 class="titulo-categoria">ACCESORIOS</h3>
+              <p class="descripcion-categoria"></p>
+              <button class="boton-plus" onclick="window.location.href='productos2.html'">+</button>
+
+            </div>
+          </div>
+        </section>
+
+        <div id="chatbot-container">
+            <button id="chatbot-toggle" class="circle-button"> 💬 </button>
+            <div id="chatbot-window">
+                <div id="chat-header">
+                    <h3>Asistente Ecotextil</h3>
+                    <span id="close-chat">&times;</span>
+                </div>
+                <div id="chat-messages">
+                    </div>
+                <div id="chat-input-container">
+                    <input type="text" id="user-input" placeholder="Escribe aquí..." />
+                    <button id="send-button">Enviar</button>
+                    <button id="clear-chat-button">Limpiar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="product-details-popup">
+            <div id="product-details-content">
+                <span id="close-popup">&times;</span>
+                <h3 id="product-name"></h3>
+                <img id="product-image" src="" alt="Imagen del producto">
+                <p id="product-description"></p>
+                <p id="product-price"></p>
+                <p id="product-features"></p>
+                <button id="buy-button">Añadir al Carrito</button>
+            </div>
+        </div>
+
+    <div style="text-align:center; margin: 40px 0;">
+      <button class="btn-encuesta" onclick="abrirModal()">📋 Participar en la Encuesta</button>
+    </div>
+
+    <div id="miModal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" aria-label="Encuesta">
+        <button class="close" aria-label="Cerrar encuesta" onclick="cerrarModal()">&times;</button>
+        <h2 style="margin-top:0; text-align:center;">Formulario de Encuesta</h2>
+
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdaiioL79tYzXJpZDz_PtSCuuaNbYFRT74u2r_1M8q1kGwHBw/viewform?embedded=true"
+                 loading="lazy"></iframe>
+      </div>
+    </div>
+
+
+    </main>
+
+    <footer>
+        <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Buzón de Sugerencias</h3>
+                <form id="sugerencias-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <textarea name="sugerencia" rows="4" placeholder="Escribe tu sugerencia aquí..." required
+                        style="padding: 1rem; border: 1px solid #ccc; border-radius: 8px;"></textarea>
+                    <button type="submit"
+                        style="background-color: #9c88ff; color: white; border: none; padding: 0.75rem; border-radius: 8px; cursor: pointer;">
+                        Enviar Sugerencia
+                    </button>
+                    <p id="mensaje-confirmacion" style="display: none; color: green;">¡Gracias por tu sugerencia!</p>
+                </form>
+            </div>
+
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Síguenos en:</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/" target="_blank" class="social-btn instagram">
+                        <img src="img/Instagram-logo.png" alt="Instagram">
+                    </a>
+                    <a href="https://wa.me/3147700560" target="_blank" class="social-btn whatsapp">
+                        <img src="img/whatsapp-logo.webp" alt="WhatsApp">
+                    </a>
+                    <a href="https://www.facebook.com/" target="_blank" class="social-btn facebook">
+                        <img src="img/facebook-logo.webp" alt="Facebook">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="text-align: center; margin-top: 1rem;">
+            <p>&copy; 2024 ECOTEXTIL. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+<script>
+    function cambiarImagen(img) {
+      document.getElementById('imagen-principal').src = img.src;
+    }
+
+    function agregarAlCarrito() {
+      const nombre = document.querySelector('.info h2').textContent.trim();
+      const precioTexto = document.querySelector('.precio').textContent.replace(/[^\d]/g, '');
+      const precio = parseInt(precioTexto, 10) || 0;
+      const cantidad = 1;
+      const imagen = document.getElementById('imagen-principal').src;
+
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      const index = carrito.findIndex(item => item.nombre === nombre);
+
+      if (index > -1) {
+        carrito[index].cantidad += cantidad;
+      } else {
+        carrito.push({ nombre, precio, cantidad, imagen });
+      }
+
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      // Actualizar contador total
+      let total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      localStorage.setItem('carritoCantidad', total);
+      document.getElementById('contador-carrito').textContent = total;
+
+      document.getElementById('mensaje-ok').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('mensaje-ok').style.display = 'none';
+      }, 1500);
+    }
+
+    function actualizarContadorCarrito() {
+      const cantidad = localStorage.getItem('carritoCantidad') || '0';
+      const contador = document.getElementById('contador-carrito');
+      if (contador) contador.textContent = cantidad;
+    }
+
+    actualizarContadorCarrito();
+    
+    // --- LÓGICA DE LA ENCUESTA (Modal) ---
+    function abrirModal() {
+        document.getElementById('miModal').setAttribute('aria-hidden', 'false');
+        document.getElementById('miModal').classList.add('visible');
+    }
+
+    function cerrarModal() {
+        document.getElementById('miModal').setAttribute('aria-hidden', 'true');
+        document.getElementById('miModal').classList.remove('visible');
+    }
+
+    // ==========================
+    // --- CHATBOT AVANZADO V7 ---
+    // ==========================
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const chatClose = document.getElementById('close-chat');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const clearChatButton = document.getElementById('clear-chat-button');
+    const chatMessages = document.getElementById('chat-messages');
+
+    const productos = [
+      {
+        nombre: "Maleta de Jean",
+        link: "productomaleta.html",
+        categoria: "accesorios",
+        precio: "$29.000",
+        caracteristicas: "Hecha de tela de jean reciclada, forrada con tela sintética. Ideal para el día a día. Cómoda y duradera.",
+        medidas: "40cm x 35cm",
+        imagen: "img/WhatsApp Image 2025-09-11 at 1.32.17 PM.jpeg"
+      },
+      {
+        nombre: "Bolso de Jean",
+        link: "productobolso.html",
+        categoria: "accesorios",
+        precio: "$22.000",
+        caracteristicas: "Hecho de tela de jean reciclada. Ideal para el día a día. Cómodo y duradero.",
+        medidas: "25cm x 30cm",
+        imagen: "img/bolsojean.jpg"
+      },
+      {
+        nombre: "Trapo para Limpiar",
+        link: "productotrapo.html",
+        categoria: "hogar",
+        precio: "$6.000",
+        caracteristicas: "Elaborado con telas de algodón reutilizadas. Absorbe líquidos de manera eficiente. Ideal para la limpieza del hogar.",
+        medidas: "24cm x 24cm",
+        imagen: "img/WhatsApp Image 2025-06-06 at 1.17.37 PM (2).jpeg"
+      },
+      {
+        nombre: "Funda para Almohada",
+        link: "productofunda.html",
+        categoria: "hogar",
+        precio: "$8.000",
+        caracteristicas: "Fabricada con retazos de tela de distintos colores. Suave al tacto y fácil de lavar.",
+        medidas: "43cm x 43cm",
+        imagen: "img/WhatsApp Image 2025-08-29 at 1.40.49 PM.jpeg"
+      },
+      {
+        nombre: "Cama para Perro",
+        link: "productocamaperro.html",
+        categoria: "mascotas",
+        precio: "$30.000",
+        caracteristicas: "Rellena con fibras de ropa reciclada. Proporciona comodidad y calidez a tu mascota.",
+        medidas: "40cm x 40cm",
+        imagen: "img/WhatsApp Image 2025-06-05 at 11.37.26 PM.jpeg"
+      },
+      {
+        nombre: "Cama para Gato",
+        link: "productocamagato.html",
+        categoria: "mascotas",
+        precio: "$30.000",
+        caracteristicas: "Diseñada para el confort de los felinos. Materiales suaves y ecológicos.",
+        medidas: "40cm x 40cm",
+        imagen: "img/WhatsApp Image 2025-06-05 at 11.37.26 PM.jpeg"
+      },
+      {
+        nombre: "Pañoleta",
+        link: "productopañoleta.html",
+        categoria: "mascotas",
+        precio: "$8.000",
+        caracteristicas: "Perfecta para complementar el look de tu mascota. Hecha de tela de algodón reutilizada.",
+        medidas: "39cm x 95cm",
+        imagen: "img/pañoleta.jpg"
+      }
+    ];
+
+    function addMessage(msg, sender = "bot", isHtml = false) {
+      const div = document.createElement('div');
+      div.classList.add('message');
+      div.classList.add(sender === "bot" ? "bot-message" : "user-message");
+      if (isHtml) {
+        div.innerHTML = msg;
+      } else {
+        div.textContent = msg;
+      }
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Renderizar categorías con acordeones e imágenes
+    function displayCategoryAccordion() {
+      const categories = ['mascotas', 'hogar', 'accesorios'];
+      let html = '<p>Puedes explorar nuestros productos por categoría:</p>';
+      
+      categories.forEach(category => {
+        const categoryProducts = productos.filter(p => p.categoria === category);
+        const categoryId = `category-${category}-${Date.now()}`;
+        
+        html += `
+          <div class="product-accordion-item">
+            <button class="accordion-button" aria-expanded="false" aria-controls="${categoryId}">
+              ${category.charAt(0).toUpperCase() + category.slice(1)}
+              <span class="accordion-icon">▶</span>
+            </button>
+            <div id="${categoryId}" class="accordion-content">
+              <div class="category-content-container">
+                ${categoryProducts.map((p, index) => {
+                  const productId = `product-${p.nombre.replace(/\s/g, '-')}-${Date.now()}-${index}`;
+                  return `
+                    <div class="product-accordion-item-nested">
+                      <button class="accordion-button" aria-expanded="false" aria-controls="${productId}">
+                        ${p.nombre}
+                        <span class="accordion-icon">▶</span>
+                      </button>
+                      <div id="${productId}" class="accordion-content">
+                        <img src="${p.imagen}" alt="${p.nombre}" style="max-width:120px; border-radius:8px; margin-bottom:8px;">
+                        <p><strong>Precio:</strong> ${p.precio}</p>
+                        <p><strong>Características:</strong> ${p.caracteristicas}</p>
+                        <p><strong>Medidas:</strong> ${p.medidas}</p>
+                        <button class="buy-button" onclick="window.location.href='${p.link}'">Ver y Comprar</button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      addMessage(html, "bot", true);
+      setupAccordionListeners();
+    }
+
+    function setupAccordionListeners() {
+      document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const content = document.getElementById(button.getAttribute('aria-controls'));
+          const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+          button.setAttribute('aria-expanded', !isExpanded);
+          content.classList.toggle('active');
+
+          const innerContent = content.querySelector('.category-content-container');
+          if (innerContent) {
+            innerContent.classList.toggle('active', !isExpanded);
+          }
+          
+          button.querySelector('.accordion-icon').textContent = isExpanded ? '▶' : '▼';
+        });
+      });
+    }
+    
+    // Nueva función para buscar productos por query
+    function searchProducts(query) {
+        const q = query.toLowerCase();
+        
+        const results = productos.filter(p => 
+            p.nombre.toLowerCase().includes(q) || 
+            p.categoria.toLowerCase().includes(q)
+        );
+        
+        if (results.length === 0) {
+            addMessage(`Lo siento, no encontré productos que coincidan con "${query}". ¿Quieres ver todas nuestras categorías?`, "bot");
+            return;
+        }
+
+        let html = `<p>Encontré ${results.length} producto(s) relacionado(s) con "${query}":</p>`;
+        
+        results.forEach(p => {
+            html += `
+                <div style="border: 1px solid #eee; padding: 10px; margin-bottom: 8px; border-radius: 4px; background-color: #f9f9f9;">
+                    <img src="${p.imagen}" alt="${p.nombre}" style="max-width:80px; float:left; margin-right:10px; border-radius:4px;">
+                    <p><strong>${p.nombre}</strong></p>
+                    <p style="font-size: 0.9em; margin: 2px 0;"><strong>Categoría:</strong> ${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</p>
+                    <p style="font-weight: bold; color: #9c88ff;">${p.precio}</p>
+                    <button class="buy-button" onclick="window.location.href='${p.link}'">Ver Detalles</button>
+                    <div style="clear:both;"></div>
+                </div>
+            `;
+        });
+
+        addMessage(html, "bot", true);
+    }
+
+    // ******************************************************
+    // *** Lógica del Chatbot ACTUALIZADA (handleBotResponse) ***
+    // ******************************************************
+    function handleBotResponse(query) {
+      const q = query.toLowerCase().trim();
+      
+      // Respuestas predefinidas
+      if (q.includes("hola") || q.includes("saludo") || q.includes("qué tal")) {
+          const welcomeMessage = `
+            ¡Hola! Soy el asistente de **Ecotextil**. 🌱
+            <br><br>
+            Trabajamos con moda sostenible a partir de textiles reciclados. ¿Quieres **buscar un producto**, ver nuestras **categorías** o saber cómo **contactarnos**?
+          `;
+          addMessage(welcomeMessage, "bot", true);
+          return;
+      }
+      
+      if (q.includes("contacto") || q.includes("dirección") || q.includes("teléfono") || q.includes("whatsapp")) {
+          const contactMessage = `
+            Puedes contactarnos a través de:
+            <ul>
+              <li>**WhatsApp:** <a href="https://wa.me/3147700560" target="_blank">314 770 0560</a></li>
+              <li>**Instagram:** <a href="https://www.instagram.com/" target="_blank">@Ecotextil</a></li>
+              <li>**Facebook:** <a href="https://www.facebook.com/" target="_blank">Ecotextil</a></li>
+              <li>O usando el formulario en nuestra página de <a href="Contactanos.html">Contáctanos</a>.</li>
+            </ul>
+          `;
+          addMessage(contactMessage, "bot", true);
+          return;
+      }
+
+      if (q.includes("productos") || q.includes("categorías") || q.includes("artículos") || q.includes("todo")) {
+          addMessage("¡Claro! Aquí tienes un resumen de nuestros productos por categoría:", "bot");
+          displayCategoryAccordion();
+          return;
+      }
+      
+      if (q.includes("gracias") || q.includes("adiós") || q.includes("chao")) {
+          addMessage("¡Con gusto! Que tengas un excelente día y gracias por apoyar la moda sostenible. 😊", "bot");
+          return;
+      }
+      
+      // Búsqueda de productos
+      if (q.length > 2) {
+          searchProducts(q);
+          return;
+      }
+
+      // Respuesta por defecto
+      const defaultMessage = `
+        No entendí tu consulta. Por favor, intenta de nuevo con palabras clave como: 
+        "productos", "mascotas", "bolso", o "contacto".
+        <br><br>
+        Si lo prefieres, puedo mostrarte todas nuestras categorías:
+      `;
+      addMessage(defaultMessage, "bot", true);
+      displayCategoryAccordion();
+    }
+    // ******************************************************
+    // ******************************************************
+
+    chatbotToggle.addEventListener('click', () => {
+      const isVisible = chatbotWindow.style.display === 'block';
+      chatbotWindow.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible) {
+        // Al abrir, limpiar y mostrar mensaje de bienvenida
+        chatMessages.innerHTML = ''; 
+        handleBotResponse('hola'); // Lanza el saludo al abrir
+      }
+    });
+
+    chatClose.addEventListener('click', () => {
+      chatbotWindow.style.display = 'none';
+    });
+
+    sendButton.addEventListener('click', () => {
+      const text = userInput.value.trim();
+      if (text === "") return;
+      addMessage(text, "user");
+      handleBotResponse(text);
+      userInput.value = '';
+    });
+
+    userInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendButton.click();
+    });
+
+    clearChatButton.addEventListener('click', () => {
+      chatMessages.innerHTML = '';
+      handleBotResponse('hola'); // Muestra el saludo después de limpiar
+    });
+    
+    // Manejo del formulario de sugerencias
+    document.getElementById('sugerencias-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simular el envío de un formulario
+      const form = e.target;
+      const textarea = form.querySelector('textarea');
+      const mensajeConfirmacion = document.getElementById('mensaje-confirmacion');
+      
+      if (textarea.value.trim() !== '') {
+          // Ocultar formulario, mostrar mensaje
+          form.style.display = 'none';
+          mensajeConfirmacion.style.display = 'block';
+          
+          // Opcional: restablecer después de un tiempo y mostrar el formulario de nuevo
+          setTimeout(() => {
+              mensajeConfirmacion.style.display = 'none';
+              form.style.display = 'flex';
+              textarea.value = ''; // Limpiar el área de texto
+          }, 5000); 
+      }
+    });
+</script>
+</body>
+</html>
